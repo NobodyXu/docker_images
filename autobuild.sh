@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 for each in *; do
-    if [ -d "$each" ]; then
-        printf "${each}\n"
+    if [ -d "$each" ] && [ -e "${each}/Dockerfile" ]; then
+        docker build "${each}/" --tag="${each}"
     fi
 done
