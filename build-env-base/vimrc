@@ -43,7 +43,7 @@ packloadall
 silent! helptags ALL
 
 " Configure ALE
-let g:ale_cpp_clang_executable = 'clang++-8'
+let g:ale_cpp_clang_executable = 'clang++'
 let g:ale_cpp_clang_options = "-std=c++17"
 
 " lh-brackets
