@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+source ./func_collection.sh
+
 if [ $UID != 0 ]; then
     echo "Does not have enough permission, please run as root"
     exit 1
@@ -34,17 +36,6 @@ else
     exit 1
 fi
 
-verify_docker_install() {
-    echo -e "\nVerifing docker install"
-    docker run --rm hello-world
-    exit_status=$?
-    docker rmi hello-world
-    if [ $exit_status != 0 ]; then
-        echo -e "\nDocker is not installed properly, something went wrong"
-        exit 1
-    fi
-}
-
 verify_docker_install
 
 echo -e "\nStart to configure docker\nEnable usernamespace first"
@@ -57,11 +48,6 @@ sysctl -w kernel.unprivileged_userns_clone=1
 
 echo -e "\nEnabling user remap feature in docker using user namespace"
 echo -e '{\n    "userns-remap": "default"\n}'>/etc/docker/daemon.json
-
-restart_docker() {
-    echo -e "\nRestarting docker"
-    /etc/init.d/docker restart
-}
 
 restart_docker
 
