@@ -13,7 +13,7 @@ COPY ctags /root/.ctags
 RUN url="http://dl-cdn.alpinelinux.org/alpine/edge/" &&\
     echo -e "${url}main\n${url}community">/etc/apk/repositories; \
     apk update && apk upgrade --no-cache &&\
-    apk add clang build-base perl man vim cmake ctags git findutils htop --no-cache
+    apk add clang build-base perl man vim cmake ctags git findutils htop curl-dev wget libmicrohttpd-dev --no-cache
 
 # Configure vim and install basic plugins
 RUN cd /root; \
