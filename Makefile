@@ -1,5 +1,6 @@
 .PHONY: all
-all: build-env-base
+all: r-lang-env build-env-base
+r-lang-env: build-env-base
 
 # Rules for building docker
 %: ; docker build "$@_src" --tag="$@"
