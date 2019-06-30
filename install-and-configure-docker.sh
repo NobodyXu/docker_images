@@ -34,8 +34,8 @@ if grep -q -e "Debian" -e "debian" /etc/*-release; then
     #fi
 
     echo -e "\nInstalling docker-ce"
-    apt update
-    apt install docker-ce docker-ce-cli containerd.io
+    apt update && apt install docker-ce docker-ce-cli containerd.io
+    Exit_if_failed $? "Failed to install docker-ce"
 
     echo -e "\nInstall completed"
 else
