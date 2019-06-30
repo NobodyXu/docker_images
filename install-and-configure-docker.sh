@@ -8,7 +8,7 @@ if [ $UID -ne 0 ]; then
 fi
 
 # Install docker-ce using distro's software manager
-if grep -q -e "Debian" -e "debian" /etc/*-release; then
+if grep -q "Debian" /etc/*-release; then
     echo -e "\nInstall necessary softwares for adding docker-ce apt source with gpg key"
     apt update && \
     apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
