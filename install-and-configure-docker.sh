@@ -12,6 +12,7 @@ Exit_if_failed $UID "Does not have enough permission, please run as root"
 if grep -q -e "Debian" -e "debian" /etc/*-release; then
     echo -e "\nInstall necessary softwares for adding docker-ce apt source with gpg key"
     apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    Exit_if_failed $? "\nFailed to install the necessary softwares for adding docker-ce apt source with gpg key"
 
     echo -e "\nInstalling fingerprint for docker-ce source"
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
