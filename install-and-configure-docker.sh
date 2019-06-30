@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 source ./func_collection.sh
 
-if [ $UID != 0 ]; then
+if [ $UID -ne 0 ]; then
     echo "Does not have enough permission, please run as root"
     exit 1
 fi
@@ -18,7 +18,7 @@ if grep -q "Debian" /etc/*-release; then
 
     echo -e "\nVerifing fingerprint of the key"
     apt-key | grep -q "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    if [ $? = 1 ]; then
+    if [ $? -eq 1 ]; then
 	echo "Failed to verify the fingerprint"
 	exit 1
     fi
@@ -40,7 +40,7 @@ verify_docker_install
 
 echo -e "\nStart to configure docker\nEnable usernamespace first"
 sysctl >/dev/null 2>&1
-if [ $? = 127 ]; then
+if [ $? -eq 127 ]; then
     echo -e "\nCommand 'sysctl' not found and thus cannot enable user namespace"
     exit 1
 fi
@@ -53,13 +53,13 @@ restart_docker
 
 echo -e "Verifing the user remap feature"
 id dockremap
-if [ $? != 0 ]; then
+if [ $? -ne 0 ]; then
     echo -e "\nDockerd failed to create dockremap user"
     exit 1
 fi
 
 grep dockremap /etc/subuid && grep dockremap /etc/subgid
-if [ $? != 0 ]; then
+if [ $? -ne 0 ]; then
     echo -e "\nDockerd failed to setup user remap feature properly"
     exit 1
 fi
