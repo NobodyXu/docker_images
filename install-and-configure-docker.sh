@@ -8,8 +8,14 @@ Exit_if_failed $UID "Does not have enough permission, please run as root"
 #    exit 1
 #fi
 
+# Get system version
+source <(sed -e "s/^/SYSTEM_/g" /etc/os-release)
+
 # Install docker-ce using distro's software manager
-if grep -q -e "Debian" -e "debian" /etc/*-release; then
+if [ $SYSTEM_ID = "debian" ] && [ $SYSTEM_ID != "raspbian" ]; then
+    echo -e "\nUninstall old, incompatible version of docker-ce"
+    apt remove docker docker-engine docker.io containerd runc
+
     echo -e "\nInstall necessary softwares for adding docker-ce apt source with gpg key"
     apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
     Exit_if_failed $? "\nFailed to install the necessary softwares for adding docker-ce apt source with gpg key"
