@@ -86,16 +86,26 @@ fi
 verify_docker_install
 
 progress_log "Start to configure docker\nEnable usernamespace first"
-sysctl >/dev/null 2>&1
+# Check whether usernamespace is enabled.
+# Load a module first
+modprobe configs
 
-Eval_and_Exit_if_failed "[ $? -ne 127 ]" "\nCommand 'sysctl' not found and thus cannot enable user namespace"
+# Register a callback for unloading this module
+trap "rmmod configs" EXIT
+if ! zgrep -E "CONFIG_USER_NS" >/dev/null 2>&1; then
+    msg="Please install a kernel configured with usernamepsace enabled as raspbian disallow enable it dynamically!"
+    Exit_if_failed "[ $SYSTEM_ID != 'raspbian' ]" $msg
 
-#if [ $? -eq 127 ]; then
-#    echo -e "\nCommand 'sysctl' not found and thus cannot enable user namespace"
-#    exit 1
-#fi
+    sysctl >/dev/null 2>&1
+    Eval_and_Exit_if_failed "[ $? -ne 127 ]" "\nCommand 'sysctl' not found and thus cannot enable user namespace"
 
-sysctl -w kernel.unprivileged_userns_clone=1
+    sysctl -w kernel.unprivileged_userns_clone=1
+    
+    #if [ $? -eq 127 ]; then
+    #    echo -e "\nCommand 'sysctl' not found and thus cannot enable user namespace"
+    #    exit 1
+    #fi
+fi
 
 progress_log "Enabling user remap feature in docker using user namespace"
 echo -e '{\n    "userns-remap": "default"\n}'>/etc/docker/daemon.json
