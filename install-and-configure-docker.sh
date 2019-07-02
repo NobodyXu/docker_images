@@ -8,11 +8,11 @@ Exit_if_failed $UID "Does not have enough permission, please run as root"
 #    exit 1
 #fi
 
-# Get system version
+# Get system distro and version
 source <(sed -e "s/^/SYSTEM_/g" /etc/os-release)
 
 # Install docker-ce using distro's software manager
-if [ $SYSTEM_ID = "debian" ] && [ $SYSTEM_ID != "raspbian" ]; then
+if [ $SYSTEM_ID = "debian" ]; then
     echo -e "\nUninstall old, incompatible version of docker-ce"
     apt remove docker docker-engine docker.io containerd runc
 
