@@ -67,9 +67,9 @@ if [ $SYSTEM_ID_LIKE = "debian" ]; then
 
 	progress_log "Installing docker-ce (first removing it)"
 
-        list="docker-ce docker-ce-cli containerd.io"
-        apt remove -y $list
-	apt update && apt install -y --no-install-recommends $list
+        packages="docker-ce docker-ce-cli containerd.io"
+        apt remove -y $packages
+	apt update && apt install -y --no-install-recommends $packages
 
         Exit_if_failed $? "Failed to install docker-ce"
 
