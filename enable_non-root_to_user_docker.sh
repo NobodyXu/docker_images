@@ -3,7 +3,7 @@
 # Get script_dir (does not work for symlink)
 # The script below is adapted from:
 #     https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+script_dir="$(cd $(dirname ${BASH_SOURCE[0]}) >/dev/null 2>&1 && pwd)"
 
 source "${script_dir}/func_collection.sh"
 
