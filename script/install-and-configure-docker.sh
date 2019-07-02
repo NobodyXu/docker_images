@@ -92,7 +92,7 @@ modprobe configs
 
 # Register a callback for unloading this module
 trap "rmmod configs" EXIT
-if ! zgrep -E "CONFIG_USER_NS" >/dev/null 2>&1; then
+if ! zgrep -E "CONFIG_USER_NS=y" >/dev/null 2>&1; then
     msg="Please install a kernel configured with usernamepsace enabled as raspbian disallow enable it dynamically!"
     Exit_if_failed "[ $SYSTEM_ID != 'raspbian' ]" $msg
 
