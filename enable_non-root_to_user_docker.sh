@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-source ./func_collection.sh
+# Get script_dir (does not work for symlink)
+# The script below is adapted from:
+#     https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source "${script_dir}/func_collection.sh"
 
 user="$1"
 Eval_and_Exit_if_failed "[ -n '$user' ]" "Usage: ./enable_non-root_user_of_docker.sh username"
