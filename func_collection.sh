@@ -1,5 +1,26 @@
+red=$'\e[1;31m'
+grn=$'\e[1;32m'
+yel=$'\e[1;33m'
+blu=$'\e[1;34m'
+mag=$'\e[1;35m'
+cyn=$'\e[1;36m'
+end=$'\e[0m'
+
+# The first argument will be treated as colour, the second as the text.
+colored_output() {
+    echo -e "${1}${2}${end}"
+}
+
+progress_log() {
+    colored_output ${grn} "\n${1}"
+}
+
+err_log() {
+    colored_output ${red} "\n${1}"
+}
+
 verify_docker_install() {
-    echo -e "\nVerifing docker install"
+    progress_log "Verifing docker install"
 
     docker run --rm hello-world
     exit_status=$?
@@ -15,14 +36,14 @@ verify_docker_install() {
 }
 
 restart_docker() {
-    echo -e "\nRestarting docker"
+    progress_log "Restarting docker"
     /etc/init.d/docker restart
 }
 
 # If [ $1 -ne 0 ], print $2 and exit.
 Exit_if_failed() {
     if [ $1 -ne 0 ]; then
-        echo -e "$2"
+        err_log "$2"
         exit 1
     fi
 }

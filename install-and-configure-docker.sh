@@ -18,17 +18,17 @@ source <(sed -e "s/^/SYSTEM_/g" /etc/os-release)
 
 # Install docker-ce using distro's software manager
 if [ $SYSTEM_ID_LIKE = "debian" ] && [ $SYSTEM_ID != "ubuntu" ]; then
-    echo -e "\nUninstall old, incompatible version of docker-ce"
+    progress_log "Uninstall old, incompatible version of docker-ce"
     apt remove docker docker-engine docker.io containerd runc
 
-    echo -e "\nInstall necessary softwares for adding docker-ce apt source with gpg key"
+    progress_log "Install necessary softwares for adding docker-ce apt source with gpg key"
     apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
     Exit_if_failed $? "\nFailed to install the necessary softwares for adding docker-ce apt source with gpg key"
 
-    echo -e "\nInstalling fingerprint for docker-ce source"
+    progress_log "Installing fingerprint for docker-ce source"
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 
-    echo -e "\nVerifing fingerprint of the key"
+    progress_log "Verifing fingerprint of the key"
     apt-key fingerprint 0EBFCD88 2>/dev/null | grep -q "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88"
     Eval_and_Exit_if_failed "[ $? -ne 1 ]" "Failed to verify the fingerprint"
     #if [ $? -eq 1 ]; then
@@ -36,7 +36,7 @@ if [ $SYSTEM_ID_LIKE = "debian" ] && [ $SYSTEM_ID != "ubuntu" ]; then
     #    exit 1
     #fi
 
-    echo -e "\nAdding docker-ce apt source"
+    progress_log "Adding docker-ce apt source"
     add-apt-repository "deb https://download.docker.com/linux/debian $(lsb_release -cs) stable"
     Exit_if_failed $? "Failed to add the docker debian source"
     #if [ $? -ne 0 ]; then
@@ -44,19 +44,19 @@ if [ $SYSTEM_ID_LIKE = "debian" ] && [ $SYSTEM_ID != "ubuntu" ]; then
     #    exit 1
     #fi
 
-    echo -e "\nInstalling docker-ce"
+    progress_log "Installing docker-ce"
     apt update && apt install docker-ce docker-ce-cli containerd.io
     Exit_if_failed $? "Failed to install docker-ce"
 
-    echo -e "\nInstall completed"
+    progress_log "Install completed"
 else
-    echo "Distribution not supported"
+    err_log "Distribution not supported"
     exit 1
 fi
 
 verify_docker_install
 
-echo -e "\nStart to configure docker\nEnable usernamespace first"
+progress_log "Start to configure docker\nEnable usernamespace first"
 sysctl >/dev/null 2>&1
 
 Eval_and_Exit_if_failed "[ $? -ne 127 ]" "\nCommand 'sysctl' not found and thus cannot enable user namespace"
@@ -68,12 +68,12 @@ Eval_and_Exit_if_failed "[ $? -ne 127 ]" "\nCommand 'sysctl' not found and thus 
 
 sysctl -w kernel.unprivileged_userns_clone=1
 
-echo -e "\nEnabling user remap feature in docker using user namespace"
+progress_log "Enabling user remap feature in docker using user namespace"
 echo -e '{\n    "userns-remap": "default"\n}'>/etc/docker/daemon.json
 
 restart_docker
 
-echo -e "Verifing the user remap feature"
+progress_log "Verifing the user remap feature"
 id dockremap
 Exit_if_failed $? "\nDockerd failed to create dockremap user"
 
