@@ -41,7 +41,8 @@ if [ $SYSTEM_ID_LIKE = "debian" ]; then
         apt remove -y docker docker-engine docker.io containerd runc
 
         progress_log "Install necessary softwares for adding docker-ce apt source with gpg key"
-        apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+	packages="apt-transport-https ca-certificates curl gnupg2 software-properties-common"
+        apt update && apt install -y --no-install-recommends $packages
         Exit_if_failed $? "\nFailed to install the necessary softwares for adding docker-ce apt source with gpg key"
 
         progress_log "Installing fingerprint for docker-ce source"
@@ -68,7 +69,7 @@ if [ $SYSTEM_ID_LIKE = "debian" ]; then
 
         list="docker-ce docker-ce-cli containerd.io"
         apt remove -y $list
-	apt update && apt install -y $list
+	apt update && apt install -y --no-install-recommends $list
 
         Exit_if_failed $? "Failed to install docker-ce"
 
