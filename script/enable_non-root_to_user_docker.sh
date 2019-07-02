@@ -23,4 +23,8 @@ Exit_if_failed $UID "Must run as root!"
 groupadd docker
 usermod -aG docker $user
 
-verify_docker_install
+export -f verify_docker_install
+# Export its dependencies (functions it called) as well
+export -f progress_log err_log colored_output Exit_if_failed
+
+su $1 bash -c verify_docker_install
