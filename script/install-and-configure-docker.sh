@@ -50,8 +50,9 @@ if [ $SYSTEM_ID_LIKE = "debian" ] && [ $SYSTEM_ID != "ubuntu" ]; then
 
     progress_log "Install completed"
 else
-    err_log "Distribution not supported"
-    exit 1
+    progress_log "Fallback to convenience script provided by docker"
+    curl https://get.docker.com | sh
+    Exit_if_failed $? "Failed to install docker-ce by using convenience script provided by docker"
 fi
 
 verify_docker_install
