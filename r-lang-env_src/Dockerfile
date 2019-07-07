@@ -7,6 +7,13 @@ RUN apk update && apk add R R-dev --no-cache
 # Load configuration file
 COPY Rprofile /root/.Rprofile
 # Install packages
+## Install basic packages required to install other packages
+RUN R -e "install.packages(c('MASS', 'devtools'))"
+
+## Install the rest.
+## But first, install readxl (part of tidyverse) separately from github, since only the newest can be installed on alpine
+RUN R -e "devtools::install_github('tidyverse/readxl')"
+
 RUN  R -e "install.packages(c('tidyverse', 'stingr', 'stringi', 'MASS'))"
 
 # Workaround the problem that multi-stage build cannot copy files between stages when 
