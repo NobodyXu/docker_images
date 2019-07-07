@@ -11,9 +11,11 @@ COPY ctags /root/.ctags
 
 # Install dependencies
 RUN url="http://dl-cdn.alpinelinux.org/alpine/edge/" &&\
-    echo -e "${url}main\n${url}community">/etc/apk/repositories; \
-    apk update && apk upgrade --no-cache &&\
-    apk add less clang build-base perl man vim cmake ctags git findutils htop curl-dev wget libmicrohttpd-dev ca-certificates --no-cache
+    echo -e "${url}main\n${url}community">/etc/apk/repositories
+
+RUN apk update && apk upgrade --no-cache
+
+RUN apk add less clang build-base perl man vim cmake ctags git findutils htop curl-dev wget libmicrohttpd-dev ca-certificates --no-cache
 
 # Installation of glibc compatible layer
 RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&\
