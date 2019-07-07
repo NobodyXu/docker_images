@@ -3,7 +3,8 @@ FROM build-env-base as base
 USER root
 
 # Install R
-RUN apk update && apk add R R-dev --no-cache
+# ALso install libxml2-dev so that R package 'xml2' can be installed
+RUN apk update && apk add R R-dev libxml2-dev --no-cache
 # Load configuration file
 COPY Rprofile /root/.Rprofile
 # Install packages
