@@ -13,7 +13,12 @@ COPY ctags /root/.ctags
 RUN url="http://dl-cdn.alpinelinux.org/alpine/edge/" &&\
     echo -e "${url}main\n${url}community">/etc/apk/repositories; \
     apk update && apk upgrade --no-cache &&\
-    apk add less clang build-base perl man vim cmake ctags git findutils htop curl-dev wget libmicrohttpd-dev --no-cache
+    apk add less clang build-base perl man vim cmake ctags git findutils htop curl-dev wget libmicrohttpd-dev ca-certificates --no-cache
+
+# Installation of glibc compatible layer
+RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&\
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-2.29-r0.apk &&\
+    apk add glibc-2.29-r0.apk
 
 # Configure vim and install basic plugins
 RUN cd /root; \
