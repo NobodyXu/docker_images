@@ -87,12 +87,17 @@ verify_docker_install
 
 progress_log "Start to configure docker\nEnable usernamespace first"
 # Check whether usernamespace is enabled.
-# Load a module first
+## Load a module first
 modprobe configs
 
-# Register a callback for unloading this module
+## Register a callback for unloading this module
 trap "rmmod configs" EXIT
-if ! zgrep -E "CONFIG_USER_NS=y" >/dev/null 2>&1; then
+
+## The Actual Checking
+is_feature_enabled() {
+    zgrep -E "CONFIG_${1}=y" >/dev/null 2>&1
+}
+if ! is_feature_enabled "USER_NS"; then
     msg="Please install a kernel configured with usernamepsace enabled as raspbian disallow enable it dynamically!"
     Exit_if_failed "[ $SYSTEM_ID != 'raspbian' ]" $msg
 
@@ -130,3 +135,8 @@ Exit_if_failed $? "\nDockerd failed to setup user remap feature properly"
 #fi
 
 verify_docker_install
+
+# Check whether seccomp is enabled and print a warning if not.
+if ! is_feature_enabled "SECCOMP" || ! is_feature_enabled "SECCOMP_FILTER"; then
+    err_log "seccomp not enabled!Please enable it by recomping the kernel"
+fi
