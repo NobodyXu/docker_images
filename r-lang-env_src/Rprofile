@@ -3,3 +3,6 @@ local({r <- getOption("repos")
        r["CRAN"] <- "http://cran.r-project.org" 
        options(repos=r)
       })
+# Idea taken from:
+#     https://www.r-bloggers.com/speeding-up-package-installation-3/
+options(Ncpus = parallel::detectCores())
