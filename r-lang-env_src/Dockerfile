@@ -9,7 +9,7 @@ RUN apk update && apk add R R-dev libxml2-dev --no-cache
 COPY Rprofile /root/.Rprofile
 # Install packages
 ## Install basic packages required to install other packages
-RUN R -e "install.packages(c('MASS', 'devtools'))"
+RUN R -e "install.packages('devtools')"
 
 ## Install the rest.
 ## But first, install readxl (part of tidyverse) separately from github, since only the newest can be installed on alpine
