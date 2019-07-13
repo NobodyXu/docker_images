@@ -8,6 +8,9 @@ COPY vimrc /root/.vimrc
 COPY profile /root/.profile
 # ctags configuration
 COPY ctags /root/.ctags
+# neovim configuration
+RUN mkdir /root/.config /root/.config/nvim
+COPY init.vim /root/.config/nvim/init.vim
 
 # This code is adapted from:
 #     https://gist.github.com/dergachev/8441335#gistcomment-2007024
@@ -20,9 +23,10 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 
 RUN apt-get update && apt-get dist-upgrade
 
-RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates automake autoconf
+RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
+                       automake autoconf neovim
 
-# Configure vim and install basic plugins
+# Configure neovim and install basic plugins
 RUN cd /root; \
     mkdir -p vimrc.d .vim/pack/git-plugins/start; \
     cd .vim/pack/git-plugins/start; \
