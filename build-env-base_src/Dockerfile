@@ -9,6 +9,15 @@ COPY profile /root/.profile
 # ctags configuration
 COPY ctags /root/.ctags
 
+# This code is adapted from:
+#     https://gist.github.com/dergachev/8441335#gistcomment-2007024
+ENV DEBIAN_FRONTEND=noninteractive
+
+## When installed using `pat install squid-deb-proxy`, it listens on port 8000 on the host by dfault.
+ARG APT_PROXY_PORT=8000
+COPY detect-apt-proxy.sh /root
+RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
+
 RUN apt-get update && apt-get dist-upgrade
 
 RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates automake autoconf
