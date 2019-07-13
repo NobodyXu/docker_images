@@ -1,5 +1,5 @@
 export LESS="RN"
-export EDITOR=vim
+export EDITOR=nvim
 export lsc="ls --color=always"
 
 # Load a customizable sh so that downstream image can add more to the profile
