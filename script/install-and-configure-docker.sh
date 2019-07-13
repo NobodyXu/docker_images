@@ -58,7 +58,7 @@ if [ $SYSTEM_ID_LIKE = "debian" ]; then
 
         progress_log "Adding docker-ce apt source -- will overwrite /etc/apt/sources.list.d/docker-ce.list"
 	repository="${base_url} ${SYSTEM_VERSION_CODENAME} stable"
-	echo -e "deb ${repository}\ndeb-src ${repository}">/etc/apt/sources.list.d/docker-ce.list
+	echo -e "deb ${repository}">/etc/apt/sources.list.d/docker-ce.list
         Exit_if_failed $? "Failed to add the docker debian source"
         #if [ $? -ne 0 ]; then
         #    echo "Failed to add the docker debian source"
