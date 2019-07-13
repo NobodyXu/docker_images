@@ -2,6 +2,11 @@ export LESS="RN"
 export EDITOR=nvim
 export lsc="ls --color=always"
 
+export CC=clang
+export CXX=clang++
+export CFLGAS="-Oz -pipe"
+export LDFLAGS="-pipe -Wl,--icf=all,-O2,--as-needed"
+
 # Load a customizable sh so that downstream image can add more to the profile
 # by chaining.
 [ -e profile_0.sh ] && source profile_0.sh
