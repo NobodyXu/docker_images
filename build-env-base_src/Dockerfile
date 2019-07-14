@@ -2,8 +2,6 @@ FROM debian:buster AS base
 
 USER root
 
-# vim configuration
-COPY vimrc /root/.vimrc
 # /bin/sh profile
 COPY profile /root/.profile
 # ctags configuration
@@ -24,17 +22,7 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 RUN apt-get update && apt-get dist-upgrade
 
 RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
-                       automake autoconf neovim
-
-# Configure neovim and install basic plugins
-RUN cd /root; \
-    mkdir -p vimrc.d .vim/pack/git-plugins/start; \
-    cd .vim/pack/git-plugins/start; \
-    git clone --depth 1 https://github.com/w0rp/ale.git; \
-    git clone https://github.com/tpope/vim-fugitive.git; \
-    git clone https://github.com/LucHermitte/lh-vim-lib.git; \
-    git clone https://github.com/LucHermitte/lh-brackets.git; \
-    git clone https://github.com/LucHermitte/VimFold4C.git
+                       automake autoconf
 
 # Install R
 # ALso install libxml2-dev so that R package 'xml2' can be installed
@@ -45,6 +33,22 @@ COPY Rprofile /root/.Rprofile
 
 # Install packages
 RUN  R -e "install.packages(c('devtools', 'tidyverse', 'stingr', 'stringi', 'MASS'))"
+
+# Install editor
+RUN apt-get install neovim
+
+# vim configuration
+COPY vimrc /root/.vimrc
+
+# Configure neovim and install basic plugins
+RUN cd /root; \
+    mkdir -p vimrc.d .vim/pack/git-plugins/start; \
+    cd .vim/pack/git-plugins/start; \
+    git clone --depth 1 https://github.com/w0rp/ale.git; \
+    git clone https://github.com/tpope/vim-fugitive.git; \
+    git clone https://github.com/LucHermitte/lh-vim-lib.git; \
+    git clone https://github.com/LucHermitte/lh-brackets.git; \
+    git clone https://github.com/LucHermitte/VimFold4C.git
 
 # Workaround the problem that multi-stage build cannot copy files between stages when 
 # usernamespace is enabled.
