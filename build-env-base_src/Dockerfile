@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 FROM debian:buster AS base
 
 USER root
@@ -24,15 +25,15 @@ RUN apt-get update && apt-get dist-upgrade
 RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
                        automake autoconf
 
-# Install R
-# ALso install libxml2-dev so that R package 'xml2' can be installed
-RUN apt-get update && apt-get install -y r-base libxml2-dev
-
-# Load configuration file
-COPY Rprofile /root/.Rprofile
-
-# Install packages
-RUN  R -e "install.packages(c('devtools', 'tidyverse', 'stingr', 'stringi', 'MASS'))"
+## Install R
+## ALso install libxml2-dev so that R package 'xml2' can be installed
+#RUN apt-get update && apt-get install -y r-base libxml2-dev
+#
+## Load configuration file
+#COPY Rprofile /root/.Rprofile
+#
+## Install packages
+#RUN  R -e "install.packages(c('devtools', 'tidyverse', 'stingr', 'stringi', 'MASS'))"
 
 # Install editor
 RUN apt-get install neovim
