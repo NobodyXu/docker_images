@@ -36,7 +36,7 @@ RUN apt-get install -y less clang build-essential perl cmake ctags git findutils
 #RUN  R -e "install.packages(c('devtools', 'tidyverse', 'stingr', 'stringi', 'MASS'))"
 
 # Install editor
-RUN apt-get install neovim
+RUN apt-get install -y neovim
 
 # vim configuration
 COPY vimrc /root/.vimrc
