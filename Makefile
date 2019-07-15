@@ -2,4 +2,4 @@
 all: build-env-base
 
 # Rules for building docker
-%: ; docker build "$@_src" --tag="$@"
+%: ; env DOCKER_BUILDKIT=0 docker build "$@_src" --tag="$@"
