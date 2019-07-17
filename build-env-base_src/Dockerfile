@@ -24,7 +24,7 @@ RUN apt-get update && apt-get dist-upgrade
 
 # Install basic softwares
 RUN apt-get install -y less build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
-                       automake autoconf
+                       automake autoconf apt-utils
 
 # Install llvm softwares
 ## llvm source for apt
