@@ -22,8 +22,23 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 
 RUN apt-get update && apt-get dist-upgrade
 
-RUN apt-get install -y less clang build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
+# Install basic softwares
+RUN apt-get install -y less build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
                        automake autoconf
+
+# Install llvm softwares
+## llvm source for apt
+COPY llvm.list /etc/apt/sources.list.d/
+
+## Add the archive signature
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+## And update the mirror info
+RUN apt-get update
+
+### Install llvm, clang and co
+RUN apt-get install -y llvm-9-dev clang-9 clang-tools-9 clang-format-9 python-clang-9
+### Install libfuzzer, lld, libc++, libomp
+RUN apt-get install -y libfuzzer-9-dev lld-9 libc++-9-dev libc++abi-9-dev libomp-9-dev
 
 ## Install R
 ## ALso install libxml2-dev so that R package 'xml2' can be installed
@@ -50,6 +65,9 @@ RUN cd /root; \
     git clone https://github.com/LucHermitte/lh-vim-lib.git; \
     git clone https://github.com/LucHermitte/lh-brackets.git; \
     git clone https://github.com/LucHermitte/VimFold4C.git
+
+# Upgrade all packages in case of cache invalidation of layers
+RUN apt-get dist-upgrade -y
 
 # Workaround the problem that multi-stage build cannot copy files between stages when 
 # usernamespace is enabled.
