@@ -27,18 +27,13 @@ RUN apt-get install -y less build-essential perl cmake ctags git findutils htop 
                        automake autoconf apt-utils
 
 # Install llvm softwares
-## llvm source for apt
-COPY llvm.list /etc/apt/sources.list.d/
+## First install dependencies for building clang
+RUN apt-get install -y python libncurses5-dev libedit-dev libpthread-stubs0-dev
 
-## Add the archive signature
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-## And update the mirror info
-RUN apt-get update
+## Clone repository for auto building llvm
+RUN git clone https://github.com/rsmmr/install-clang.git /tmp/install-clang
 
-### Install llvm, clang and co
-RUN apt-get install -y llvm-9-dev clang-9 clang-tools-9 clang-format-9 python-clang-9
-### Install libfuzzer, lld, libc++, libomp
-RUN apt-get install -y libfuzzer-9-dev lld-9 libc++-9-dev libc++abi-9-dev libomp-9-dev
+RUN env -u CC -u CXX -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C /opt/clang
 
 ## Install R
 ## ALso install libxml2-dev so that R package 'xml2' can be installed
