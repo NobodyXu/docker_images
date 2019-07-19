@@ -59,12 +59,12 @@ COPY vimrc /root/.vimrc
 # Configure neovim and install basic plugins
 RUN cd /root; \
     mkdir -p vimrc.d .vim/pack/git-plugins/start; \
-    cd .vim/pack/git-plugins/start; \
-    git clone --depth 1 https://github.com/w0rp/ale.git; \
-    git clone https://github.com/tpope/vim-fugitive.git; \
-    git clone https://github.com/LucHermitte/lh-vim-lib.git; \
-    git clone https://github.com/LucHermitte/lh-brackets.git; \
-    git clone https://github.com/LucHermitte/VimFold4C.git
+
+RUN cd .vim/pack/git-plugins/start && git clone --depth 1 https://github.com/w0rp/ale.git
+RUN cd .vim/pack/git-plugins/start && git clone https://github.com/tpope/vim-fugitive.git
+RUN cd .vim/pack/git-plugins/start && git clone https://github.com/LucHermitte/lh-vim-lib.git
+RUN cd .vim/pack/git-plugins/start && git clone https://github.com/LucHermitte/lh-brackets.git
+RUN cd .vim/pack/git-plugins/start && git clone https://github.com/LucHermitte/VimFold4C.git
 
 # Upgrade all packages in case of cache invalidation of layers
 RUN apt-get dist-upgrade -y
