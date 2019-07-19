@@ -30,10 +30,15 @@ RUN apt-get install -y less build-essential perl cmake ctags git findutils htop 
 ## First install dependencies for building clang
 RUN apt-get install -y python libncurses5-dev libedit-dev libpthread-stubs0-dev
 
+## Also clang for self lifting
+RUN apt-get install -y clang
+
 ## Clone repository for auto building llvm
 RUN git clone https://github.com/rsmmr/install-clang.git /tmp/install-clang
 
-RUN env -u CC -u CXX -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C /opt/clang
+RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C -S -s 0 /opt/clang
+RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C -S -s 1 /opt/clang
+RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C -S -s 2 /opt/clang
 
 ## Install R
 ## ALso install libxml2-dev so that R package 'xml2' can be installed

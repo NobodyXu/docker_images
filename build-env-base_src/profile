@@ -1,3 +1,4 @@
+export PATH=/opt/clang/bin:$PATH
 export LESS="RN"
 export EDITOR=nvim
 export lsc="ls --color=always"
