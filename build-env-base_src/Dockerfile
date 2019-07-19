@@ -20,7 +20,7 @@ ARG APT_PROXY_PORT=8000
 COPY detect-apt-proxy.sh /root
 RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 
-RUN apt-get update && apt-get dist-upgrade
+RUN apt-get update && apt-get dist-upgrade -y
 
 # Install basic softwares
 RUN apt-get install -y less build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
