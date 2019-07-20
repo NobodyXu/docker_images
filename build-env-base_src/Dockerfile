@@ -55,8 +55,7 @@ RUN apt-get install -y neovim
 COPY vimrc /root/.vimrc
 
 # Configure neovim and install basic plugins
-RUN cd /root; \
-    mkdir -p vimrc.d .vim/pack/git-plugins/start; \
+RUN cd /root && mkdir -p vimrc.d .vim/pack/git-plugins/start
 
 RUN cd .vim/pack/git-plugins/start && git clone --depth 1 https://github.com/w0rp/ale.git
 RUN cd .vim/pack/git-plugins/start && git clone https://github.com/tpope/vim-fugitive.git
