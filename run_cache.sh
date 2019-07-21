@@ -2,6 +2,7 @@
 
 if [ -z "$1" ] || [ -z "$2" ]; then
     echo "Usage: run_cache.sh (will-be)container_name image_name"
+    exit 1
 fi
 
 if ! docker ps -a | grep -q "$1"; then
