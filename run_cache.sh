@@ -7,5 +7,4 @@ fi
 if ! docker ps -a | grep -q "$1"; then
     docker run -d --restart on-failure --name $1 $2
 elif ! docker ps | grep -q "$1"; then
-    docker start $1
 fi
