@@ -12,7 +12,7 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 # Install dependencies
 RUN apt-get update && apt-get dist-upgrade -y
 RUN apt-get install -y nodejs npm git apt-utils
-RUN apt-get clean
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install git-cache-http-server
 RUN npm install -g git-cache-http-server
