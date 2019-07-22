@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-    echo "Usage: run_cache.sh (will-be)container_name image_name published_port"
+    echo "Usage: run_cache.sh (will-be)container_name image_name published_port volume_target_path"
     exit 1
 fi
 
@@ -15,4 +15,14 @@ if docker ps -a | grep -q "$1"; then
     docker rm "$1"
 fi
 
-exec docker run -d --restart on-failure -p "$3":"$3" --name "$1" "$2"
+docker run -d \
+	   --restart on-failure \
+	   -p "$3":"$3" \
+	   --mount "type=volume,src=$2,dst=$4" \
+	   --name "$1" \
+	   "$2"
+
+# Wait for the container to be up
+while !  nc -z 127.0.0.1 "$3"; do
+    sleep 0.1s
+done
