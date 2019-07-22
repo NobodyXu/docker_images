@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Usage: run_cache.sh (will-be)container_name image_name"
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    echo "Usage: run_cache.sh (will-be)container_name image_name published_port"
     exit 1
 fi
 
@@ -15,4 +15,4 @@ if ! docker ps -a | grep -q "$1"; then
     docker rm "$1"
 fi
 
-exec docker run -d --restart on-failure --name "$1" "$2"
+exec docker run -d --restart on-failure -p "$3":"$3" --name "$1" "$2"
