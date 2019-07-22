@@ -42,7 +42,8 @@ RUN apt-get install -y clang
 ## Clone repository for auto building llvm
 RUN git clone https://github.com/rsmmr/install-clang.git /tmp/install-clang
 
-RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -C /opt/clang
+COPY run_install_clang.sh /root/
+RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /root/run_install_clang.sh
 
 ## Install R
 ## ALso install libxml2-dev so that R package 'xml2' can be installed
