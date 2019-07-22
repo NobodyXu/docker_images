@@ -17,6 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ## When installed using `apt install squid-deb-proxy`, it listens on port 8000 on the host by dfault.
 ARG APT_PROXY_PORT=8000
+ARG GIT_PROXY_PORT=8080
 
 COPY detect-apt-proxy.sh /root
 RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
@@ -26,6 +27,9 @@ RUN apt-get update && apt-get dist-upgrade -y
 # Install basic softwares
 RUN apt-get install -y less build-essential perl cmake ctags git findutils htop curl wget libmicrohttpd-dev ca-certificates \
                        automake autoconf apt-utils
+
+# Add git proxy 
+RUN /root/detect-apt-proxy.sh "" ${GIT_PROXY_PORT}
 
 # Install llvm softwares
 ## First install dependencies for building clang

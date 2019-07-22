@@ -10,7 +10,6 @@ if [[ ! -z "$APT_PROXY_PORT" ]] && [[ ! -z "$HOST_IP" ]]; then
     echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/01proxy
     cat >> /etc/apt/apt.conf.d/01proxy <<EOL
     Acquire::HTTP::Proxy "http://${HOST_IP}:${APT_PROXY_PORT}";
-    Acquire::HTTPS::Proxy "false";
 EOL
     cat /etc/apt/apt.conf.d/01proxy
     echo "Using host's apt proxy"

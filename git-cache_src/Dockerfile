@@ -17,9 +17,6 @@ RUN apt-get clean
 # Install git-cache-http-server
 RUN npm install -g git-cache-http-server
 
-# Install systemd file
-COPY git-cache-http-server.service /etc/systemd/system
-
 # Workaround the problem that multi-stage build cannot copy files between stages when 
 # usernamespace is enabled.
 RUN chown -R root:root $(ls / | grep -v -e "dev" -e "sys" -e "tmp" -e "proc") || echo
@@ -27,4 +24,4 @@ RUN chown -R root:root $(ls / | grep -v -e "dev" -e "sys" -e "tmp" -e "proc") ||
 FROM debian:buster
 COPY --from=base / /
 EXPOSE 8080
-CMD ["/usr/bin/env", "systemctl", "start", "git-cache-http-server"]
+CMD ["/usr/bin/env", "git-cache-http-server"]
