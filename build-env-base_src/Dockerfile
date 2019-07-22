@@ -72,6 +72,9 @@ RUN cd .vim/pack/git-plugins/start && git clone https://github.com/LucHermitte/V
 # Upgrade all packages in case of cache invalidation of layers
 RUN apt-get dist-upgrade -y
 
+# Clean apt-get cache and rsmmr git repo in /tmp
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # Workaround the problem that multi-stage build cannot copy files between stages when 
 # usernamespace is enabled.
 RUN chown -R root:root $(ls / | grep -v -e "dev" -e "sys" -e "tmp" -e "proc") || echo
