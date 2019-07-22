@@ -11,6 +11,7 @@ COPY ctags /root/.ctags
 RUN mkdir /root/.config /root/.config/nvim
 COPY init.vim /root/.config/nvim/init.vim
 
+# Add apt cache
 # This code is adapted from:
 #     https://gist.github.com/dergachev/8441335#gistcomment-2007024
 ENV DEBIAN_FRONTEND=noninteractive
