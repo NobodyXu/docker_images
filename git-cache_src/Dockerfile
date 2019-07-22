@@ -12,10 +12,14 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 # Install dependencies
 RUN apt-get update && apt-get dist-upgrade -y
 RUN apt-get install -y nodejs npm git apt-utils
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install git-cache-http-server
 RUN npm install -g git-cache-http-server
+
+# Clean apt-get cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Clean npm cache
+RUN npm cache clean --force
 
 # Workaround the problem that multi-stage build cannot copy files between stages when 
 # usernamespace is enabled.
