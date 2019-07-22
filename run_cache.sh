@@ -7,9 +7,9 @@ fi
 
 # If the container already exists, remove it and start a new one
 # in case that the image is updated.
-if ! docker ps -a | grep -q "$1"; then
+if docker ps -a | grep -q "$1"; then
     # Stop the container first if it is running.
-    if ! docker ps | grep -q "$1"; then
+    if docker ps | grep -q "$1"; then
         docker stop "$1"
     fi
     docker rm "$1"
