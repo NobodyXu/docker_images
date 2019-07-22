@@ -15,8 +15,9 @@ COPY init.vim /root/.config/nvim/init.vim
 #     https://gist.github.com/dergachev/8441335#gistcomment-2007024
 ENV DEBIAN_FRONTEND=noninteractive
 
-## When installed using `pat install squid-deb-proxy`, it listens on port 8000 on the host by dfault.
+## When installed using `apt install squid-deb-proxy`, it listens on port 8000 on the host by dfault.
 ARG APT_PROXY_PORT=8000
+
 COPY detect-apt-proxy.sh /root
 RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 
