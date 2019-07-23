@@ -4,7 +4,7 @@
 # due to timeout or whatever.
 git() {
     while true; do
-        /usr/bin/env git "$@"
+        /usr/bin/env GIT_HTTP_LOW_SPEED_LIMIT=-0.1 GIT_HTTP_LOW_SPEED_TIME=999999 git "$@"
         if [ $? -ne 0 ] && [ -n "$1" ] && [ "$1" = "clone" ]; then
             continue
         fi
