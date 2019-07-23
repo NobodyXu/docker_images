@@ -12,4 +12,4 @@ git() {
     done
 }
 
-source /tmp/install-clang/install-clang -j $(nproc) -C /opt/clang
+source /tmp/install-clang/install-clang -j $(nproc) /opt/clang

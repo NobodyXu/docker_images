@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM debian:buster AS base
+FROM debian:buster AS dependencies
 
 USER root
 
@@ -21,8 +21,7 @@ RUN /root/detect-apt-proxy.sh ${APT_PROXY_PORT}
 RUN apt-get update && apt-get dist-upgrade -y
 
 # Install basic softwares
-RUN apt-get install -y less build-essential perl cmake git findutils curl wget ca-certificates \
-                       automake autoconf apt-utils
+RUN apt-get install -y build-essential perl cmake git findutils curl wget ca-certificates automake autoconf apt-utils
 
 # Add git proxy 
 RUN /root/detect-apt-proxy.sh "" ${GIT_PROXY_PORT}
@@ -34,21 +33,19 @@ RUN apt-get install -y python libncurses5-dev libedit-dev libpthread-stubs0-dev
 ## Also clang for self lifting
 RUN apt-get install -y clang
 
+FROM dependencies AS llvm-with-build-tree_base
+
 ## Clone repository for auto building llvm
 RUN git clone https://github.com/rsmmr/install-clang.git /tmp/install-clang
 
 COPY run_install_clang.sh /root/
+# The command below does not clean the build tree.
 RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /root/run_install_clang.sh
 
-## Install R
-## ALso install libxml2-dev so that R package 'xml2' can be installed
-#RUN apt-get update && apt-get install -y r-base libxml2-dev
-#
-## Load configuration file
-#COPY Rprofile /root/.Rprofile
-#
-## Install packages
-#RUN  R -e "install.packages(c('devtools', 'tidyverse', 'stingr', 'stringi', 'MASS'))"
+FROM llvm-with-build-tree_base AS llvm_base
+
+# Cleanup
+RUN env -u CFLAGS -u LDFLAGS PATH=/opt/clang/bin:$PATH /tmp/install-clang/install-clang -j $(nproc) -c -s 2 -u -c
 
 # Upgrade all packages in case of cache invalidation of layers
 RUN apt-get dist-upgrade -y
